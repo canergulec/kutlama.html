@@ -13,7 +13,7 @@
         }
         
         body {
-            background-color: #F06292; /* Resimdeki pembe ton */
+            background-color: #F06292;
             color: #ffffff;
             display: flex;
             justify-content: center;
@@ -87,7 +87,6 @@
             cursor: pointer;
         }
 
-        /* YENİ SPOTIFY TARZI OYNATICI KONTROLLERİ */
         .custom-player {
             display: flex;
             flex-direction: column;
@@ -174,7 +173,7 @@
 
         .play-pause-btn:hover {
             transform: scale(1.05);
-            background: #1db954; /* Spotify Yeşili Hover */
+            background: #1db954; 
             color: #ffffff;
         }
 
@@ -286,7 +285,10 @@
     </div>
 
     <script>
-        // SIFIRDAN MİLİSANİYESİNE KADAR DİNLENEREK ÇIKARILMIŞ KUSURSUZ ZAMANLAMALAR
+        // İŞTE BURASI: Altyazıları 1 saniye geriye aldık (1 saniye daha ERKEN gelecek).
+        // Eğer geç gelmesini istersen 1 yerine -1 yapabilirsin.
+        const zamanKaymasi = 1; 
+
         const lyricsData = [
             { time: 0.0, text: "♪ (Müzik)" },
             { time: 21.5, text: "Bu gecə sərxoşam" },
@@ -340,7 +342,6 @@
         
         let currentLineIndex = -1;
 
-        // Sözleri Ekrana Basma
         lyricsData.forEach((line, index) => {
             const div = document.createElement('div');
             div.className = 'lyric-line';
@@ -349,7 +350,6 @@
             lyricsWrapper.appendChild(div);
         });
 
-        // Zamanı formatlama fonksiyonu (0:00)
         function formatTime(seconds) {
             if (isNaN(seconds)) return "0:00";
             const min = Math.floor(seconds / 60);
@@ -357,13 +357,11 @@
             return `${min}:${sec < 10 ? '0' : ''}${sec}`;
         }
 
-        // Şarkı yüklendiğinde toplam süreyi göster
         audio.addEventListener('loadedmetadata', () => {
             progressBar.max = audio.duration;
             totalTimeEl.innerText = formatTime(audio.duration);
         });
 
-        // Oynat/Durdur Butonu
         playPauseBtn.addEventListener('click', () => {
             if (audio.paused) {
                 audio.play();
@@ -374,27 +372,25 @@
             }
         });
 
-        // Çubuğu kaydırınca şarkıyı sarma
         progressBar.addEventListener('input', () => {
             audio.currentTime = progressBar.value;
         });
 
-        // Şarkı çaldıkça hem çubuğu hem altyazıyı güncelle
         audio.addEventListener('timeupdate', () => {
             const currentTime = audio.currentTime;
             
-            // Çubuğu güncelle
             progressBar.value = currentTime;
             currentTimeEl.innerText = formatTime(currentTime);
 
-            // Dolum rengi (Spotify yeşiline doğru gradient de yapılabilir, beyaz tuttum)
             const progressPercent = (currentTime / audio.duration) * 100;
             progressBar.style.background = `linear-gradient(to right, #1db954 ${progressPercent}%, #4d4d4d ${progressPercent}%)`;
             
-            // Altyazı senkronizasyonu
+            // Zaman kaymasını sözlerin akışına ekliyoruz
+            const adjustedTime = currentTime + zamanKaymasi;
+
             let activeIndex = -1;
             for (let i = 0; i < lyricsData.length; i++) {
-                if (currentTime >= lyricsData[i].time) {
+                if (adjustedTime >= lyricsData[i].time) {
                     activeIndex = i;
                 } else {
                     break;
@@ -418,7 +414,6 @@
             }
         });
 
-        // Şarkı bitince butonu resetle
         audio.addEventListener('ended', () => {
             playPauseBtn.innerText = "▶";
             progressBar.value = 0;
