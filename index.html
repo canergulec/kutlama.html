@@ -3,233 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teknoloji Günlüğü</title>
+    <title>Yerin Görsənir - Namiq Qasımov</title>
     <style>
-        /* Renk Paleti ve Değişkenler */
-        :root {
-            --bg-color: #000000;
-            --text-main: #f5f5f7;
-            --text-muted: #a1a1a6;
-            --card-bg: #1c1c1e;
-            --border-color: #333336;
-            --accent: #2997ff;
-        }
-
-        /* Temel Sıfırlamalar */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            /* Apple benzeri sistem fontları */
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.5;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* Glassmorphism Etkili Üst Menü */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 48px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: saturate(180%) blur(20px);
-            -webkit-backdrop-filter: saturate(180%) blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 40px;
-        }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 400;
-            letter-spacing: -0.01em;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--text-main);
-        }
-
-        /* Hero (Karşılama) Alanı */
-        .hero {
-            text-align: center;
-            padding: 140px 20px 60px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 700;
-            letter-spacing: -0.005em;
-            margin-bottom: 15px;
-        }
-
-        .hero p {
-            font-size: 24px;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        /* Blog Kartları Izgarası */
-        .container {
-            max-width: 1040px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-
-        /* Apple Tarzı Yuvarlatılmış Kartlar */
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 18px;
-            padding: 30px;
-            text-decoration: none;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            transition: transform 0.3s ease, background-color 0.3s ease;
-            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-
-        .card:hover {
-            transform: scale(1.02);
-            background-color: #242426;
-        }
-
-        .card-category {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-
-        .card h2 {
-            color: var(--text-main);
-            font-size: 24px;
-            margin-bottom: 12px;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 15px;
-            flex-grow: 1;
-        }
-
-        .card-footer {
-            margin-top: 24px;
-            font-size: 12px;
-            color: var(--text-muted);
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Alt Bilgi */
-        footer {
+        .header-text {
+            position: absolute;
+            top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1db954; /* Spotify yeşili tonunda */
             text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-            font-size: 12px;
-            border-top: 1px solid var(--border-color);
-            margin-top: 80px;
+            width: 100%;
+            letter-spacing: 1px;
         }
-
-        /* Mobil Uyum */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 40px; }
-            .hero p { font-size: 20px; }
-            nav ul { gap: 20px; }
+        .album-art {
+            width: 250px;
+            height: 250px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            margin-bottom: 20px;
+            background-color: #282828;
+            /* Resim eklemek istersen alttaki yorumu kaldır ve resim adını gir */
+            /* background-image: url('cover.jpg'); */
+            background-size: cover;
+            background-position: center;
+        }
+        .song-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .song-title {
+            font-size: 2rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        .artist-name {
+            font-size: 1.2rem;
+            color: #b3b3b3;
+            margin: 5px 0 0 0;
+        }
+        .lyrics-container {
+            height: 180px;
+            overflow: hidden;
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            /* Üstten ve alttan solma efekti (fade) */
+            mask-image: linear-gradient(transparent, black 30%, black 70%, transparent);
+            -webkit-mask-image: linear-gradient(transparent, black 30%, black 70%, transparent);
+        }
+        .lyrics-wrapper {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            transition: transform 0.5s ease-out;
+        }
+        .lyric-line {
+            font-size: 1.3rem;
+            padding: 12px 0;
+            color: #555;
+            transition: all 0.3s ease;
+            min-height: 35px;
+            margin: 0;
+        }
+        .lyric-line.active {
+            color: #ffffff;
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        audio {
+            margin-top: 30px;
+            width: 80%;
+            max-width: 400px;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
-    <!-- Üst Menü -->
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#">Ana Sayfa</a></li>
-                <li><a href="#">Yazılım</a></li>
-                <li><a href="#">Donanım</a></li>
-                <li><a href="#">Hakkımda</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="header-text">durum bu sarkı sana gelsin</div>
 
-    <!-- Karşılama Alanı -->
-    <section class="hero">
-        <h1>Teknolojinin Kalbi.</h1>
-        <p>Kodlama, yeni nesil cihazlar ve modern web üzerine notlar.</p>
-    </section>
+    <div class="album-art"></div>
+    
+    <div class="song-info">
+        <h1 class="song-title">Yerin Görsənir</h1>
+        <h2 class="artist-name">Namiq Qasımov</h2>
+    </div>
 
-    <!-- Blog İçerikleri -->
-    <main class="container">
-        <div class="grid">
+    <div class="lyrics-container">
+        <div class="lyrics-wrapper" id="lyricsWrapper">
+            </div>
+    </div>
+
+    <audio id="audioPlayer" controls>
+        <source src="sarki.mp3" type="audio/mpeg">
+        Tarayıcınız müzik çaları desteklemiyor.
+    </audio>
+
+    <script>
+        // ŞARKI SÖZLERİ VE ZAMANLAMALARI (Saniye cinsinden)
+        // Şarkıyı dinleyerek saniyeleri ve sözleri buraya girmelisin.
+        const lyricsData = [
+            { time: 0, text: "(Müzik)" },
+            { time: 8, text: "Bu kısma şarkının ilk cümlesini yaz..." },
+            { time: 13, text: "Buraya ikinci cümleyi yaz..." },
+            { time: 18, text: "time kısmındaki sayılar saniyeyi ifade eder." },
+            { time: 24, text: "Sözleri bu şekilde çoğaltarak aşağı doğru inebilirsin." }
+        ];
+
+        const audio = document.getElementById('audioPlayer');
+        const lyricsWrapper = document.getElementById('lyricsWrapper');
+        let currentLineIndex = -1;
+
+        // Sözleri HTML içine aktarma
+        lyricsData.forEach((line, index) => {
+            const div = document.createElement('div');
+            div.className = 'lyric-line';
+            div.id = `line-${index}`;
+            div.innerText = line.text;
+            lyricsWrapper.appendChild(div);
+        });
+
+        // Müzik çaldıkça sözleri takip etme ve kaydırma
+        audio.addEventListener('timeupdate', () => {
+            const currentTime = audio.currentTime;
             
-            <!-- Makale 1 -->
-            <article class="card">
-                <span class="card-category">Yazılım Geliştirme</span>
-                <h2>C++ ile Sistem Programlamanın Derinlikleri</h2>
-                <p>Binary dosya işlemleri ve bellek yönetimi üzerine pratik örnekler. Veri yapılarını doğrudan donanım seviyesinde nasıl kontrol edebiliriz?</p>
-                <div class="card-footer">
-                    <span>12 Mayıs 2026</span>
-                    <span>5 dk okuma</span>
-                </div>
-            </article>
+            let activeIndex = -1;
+            for (let i = 0; i < lyricsData.length; i++) {
+                if (currentTime >= lyricsData[i].time) {
+                    activeIndex = i;
+                } else {
+                    break;
+                }
+            }
 
-            <!-- Makale 2 -->
-            <article class="card">
-                <span class="card-category">Donanım</span>
-                <h2>Yeni Nesil Akıllı Telefonlarda Neler Bekliyoruz?</h2>
-                <p>Artan depolama ihtiyaçları, 256GB'ın neden yeni standart olması gerektiği ve amiral gemisi cihazlardaki son işlemci mimarileri.</p>
-                <div class="card-footer">
-                    <span>8 Mayıs 2026</span>
-                    <span>4 dk okuma</span>
-                </div>
-            </article>
+            if (activeIndex !== currentLineIndex && activeIndex !== -1) {
+                if (currentLineIndex !== -1) {
+                    const prevLine = document.getElementById(`line-${currentLineIndex}`);
+                    if(prevLine) prevLine.classList.remove('active');
+                }
+                
+                const currentLine = document.getElementById(`line-${activeIndex}`);
+                if(currentLine) currentLine.classList.add('active');
+                currentLineIndex = activeIndex;
 
-            <!-- Makale 3 -->
-            <article class="card">
-                <span class="card-category">Web Tasarım</span>
-                <h2>Modern ve Hızlı Arayüzler İnşa Etmek</h2>
-                <p>Sadece HTML ve CSS kullanarak e-ticaret altyapılarına ve kişisel blog temalarına Apple sadeliğini nasıl taşıyabiliriz?</p>
-                <div class="card-footer">
-                    <span>1 Mayıs 2026</span>
-                    <span>6 dk okuma</span>
-                </div>
-            </article>
-
-        </div>
-    </main>
-
-    <!-- Alt Bilgi -->
-    <footer>
-        <p>&copy; 2026 Teknoloji Günlüğü. Tüm hakları saklıdır.</p>
-    </footer>
-
+                // Satır kaydırma animasyonu (satır yüksekliğine göre ayarlandı)
+                const lineHeight = 60; 
+                const translateY = -(activeIndex * lineHeight);
+                lyricsWrapper.style.transform = `translateY(${translateY}px)`;
+            }
+        });
+    </script>
 </body>
 </html>
