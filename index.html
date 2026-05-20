@@ -57,7 +57,8 @@
             border-radius: 8px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             margin-bottom: 25px;
-            background-image: url('cover.jpg'); 
+            /* Resim adı duru.png olarak değiştirildi */
+            background-image: url('duru.png'); 
             background-size: cover;
             background-position: center;
         }
@@ -112,18 +113,16 @@
             flex-shrink: 0;
         }
 
-        /* YAG GİBİ KAYMA İÇİN YENİ CSS AYARLARI */
         .lyrics-scroll-area {
             flex: 1;
-            overflow: hidden; /* Scroll bar'ı tamamen iptal ettik */
+            overflow: hidden; 
             position: relative;
         }
 
         #lyricsWrapper {
             position: absolute;
-            top: 50%; /* Yazıları ortadan başlat */
+            top: 50%; 
             width: 100%;
-            /* Pürüzsüz kayma animasyonu (Smooth easing) */
             transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
             transform: translateY(0);
         }
@@ -191,11 +190,10 @@
     </div>
 
     <script>
-        // Sen 2.0 yapmıştın, ben sözlerin dizilişini o ayara göre güncelledim.
-        // Artık burası 0 kalabilir, ince ayar gerekirse sadece küsüratlı değiştir (örn: 0.5 veya -0.5)
-        const zamanKaymasi = 0; 
+        // Altyazı 1 saniye geriye alındı (daha geç gelecek)
+        // Eğer tam tersi 1 saniye erken gelmesini istersen -1 yerine 1 yapabilirsin.
+        const zamanKaymasi = -1; 
 
-        // Ritmik ve organik olarak yeniden zamanlanmış sözler (İleride kayma yapmaması için)
         const lyricsData = [
             { time: 0, text: "♪ (Müzik)" },
             { time: 21.0, text: "Bu gecə sərxoşam" },
@@ -274,8 +272,6 @@
                 if(currentLine) {
                     currentLine.classList.add('active');
                     
-                    // YAG GİBİ KAYDIRAN MATEMATİK
-                    // Aktif olan satırı kutunun tam ortasına hizalamak için wrapper'ı Y ekseninde kaydırıyoruz
                     const offset = -(currentLine.offsetTop) - (currentLine.clientHeight / 2);
                     lyricsWrapper.style.transform = `translateY(${offset}px)`;
                 }
