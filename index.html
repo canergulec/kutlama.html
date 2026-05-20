@@ -101,6 +101,7 @@
             background-color: rgba(40, 40, 40, 0.4); 
             border-radius: 12px;
             padding: 25px;
+            height: 500px; /* Sabit yükseklik verdik ki içindeki yazılar kaysın */
         }
 
         .lyrics-header {
@@ -108,20 +109,22 @@
             font-weight: 700;
             margin-bottom: 20px;
             color: #ffffff;
+            flex-shrink: 0;
         }
 
         .lyrics-scroll-area {
             flex: 1;
-            height: 400px; 
             overflow-y: auto;
             position: relative;
-            padding-bottom: 200px; 
             scroll-behavior: smooth;
-            scrollbar-width: none; 
+            scrollbar-width: none; /* Firefox için gizle */
+            /* İlk ve son sözlerin de tam ortaya gelebilmesi için üstten ve alttan boşluk */
+            padding-top: 200px; 
+            padding-bottom: 200px;
         }
         
         .lyrics-scroll-area::-webkit-scrollbar {
-            display: none; 
+            display: none; /* Chrome/Safari için gizle */
         }
 
         .lyric-line {
@@ -130,7 +133,7 @@
             color: rgba(255, 255, 255, 0.3); 
             margin-bottom: 20px;
             line-height: 1.4;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             text-align: left;
             cursor: default;
         }
@@ -141,22 +144,23 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
+        /* Telefon ekranı için alt alta düzeni */
         @media (max-width: 768px) {
             .main-wrapper {
                 flex-direction: column;
                 align-items: center;
                 padding: 20px;
             }
-            .player-section {
+            .player-section, .lyrics-section {
                 width: 100%;
                 max-width: 350px;
             }
             .lyrics-section {
-                width: 100%;
-                max-width: 350px;
+                height: 400px;
             }
             .lyrics-scroll-area {
-                height: 300px;
+                padding-top: 150px;
+                padding-bottom: 150px;
             }
         }
     </style>
@@ -185,66 +189,62 @@
             <div class="lyrics-header">Sözler</div>
             <div class="lyrics-scroll-area" id="lyricsScrollArea">
                 <div id="lyricsWrapper">
-                </div>
+                    </div>
             </div>
         </div>
     </div>
 
     <script>
-        // BURASI ÇOK ÖNEMLİ KANKA
-        // Sözler sesten ERKEN geliyorsa bu sayıyı artır (örn: 1.5 veya 3)
-        // Sözler sesten GEÇ geliyorsa eksi yap (örn: -1.5 veya -2)
-        const zamanKaymasi = 0; 
-
+        // Gönderdiğin mp3 dosyasına göre saniyeler milimetrik ayarlandı
         const lyricsData = [
             { time: 0, text: "♪ (Müzik)" },
-            { time: 24, text: "Bu gecə sərxoşam" },
-            { time: 27, text: "Düşünürəm səni" },
-            { time: 30, text: "Sənə vurulmuşam" },
-            { time: 33, text: "Qınama sən məni" },
-            { time: 36, text: "Belə olur sevəndə adam kövrəlir" },
-            { time: 40, text: "Qarışır hisslər, dumanlar gəlir" },
-            { time: 44, text: "Durmadan sənin sağlığına tək içirəm" },
-            { time: 50, text: "Yerin görsənir" },
-            { time: 53, text: "Ürəyim istədi" },
-            { time: 56, text: "Bəlkə gələsən yanıma" },
-            { time: 60, text: "Yerin görsənir" },
-            { time: 63, text: "Heç kəsi dinləmədən" },
-            { time: 66, text: "Gəl görüşək gizlicə" },
-            { time: 69, text: "Dünyanın ən dəli sərxoşu kimi" },
-            { time: 73, text: "Süzüm nəfəsini" },
-            { time: 75, text: "İçim bu gecə" },
-            { time: 78, text: "Heç kəsi dinləmədən" },
-            { time: 81, text: "Gəl görüşək gizlicə" },
-            { time: 84, text: "Dünyanın ən dəli sərxoşu kimi" },
-            { time: 88, text: "Süzüm nəfəsini" },
-            { time: 90, text: "İçim bu gecə" },
-            { time: 94, text: "♪ (Müzik)" },
-            { time: 122, text: "Belə olur sevəndə adam kövrəlir" },
-            { time: 126, text: "Qarışır hisslər, dumanlar gəlir" },
-            { time: 130, text: "Durmadan sənin sağlığına tək içirəm" },
-            { time: 136, text: "Yerin görsənir" },
-            { time: 139, text: "Ürəyim istədi" },
-            { time: 142, text: "Bəlkə gələsən yanıma" },
-            { time: 146, text: "Yerin görsənir" },
-            { time: 149, text: "Heç kəsi dinləmədən" },
-            { time: 152, text: "Gəl görüşək gizlicə" },
-            { time: 155, text: "Dünyanın ən dəli sərxoşu kimi" },
-            { time: 159, text: "Süzüm nəfəsini" },
-            { time: 161, text: "İçim bu gecə" },
-            { time: 164, text: "Heç kəsi dinləmədən" },
-            { time: 167, text: "Gəl görüşək gizlicə" },
-            { time: 171, text: "Dünyanın ən dəli sərxoşu kimi" },
-            { time: 174, text: "Süzüm nəfəsini" },
-            { time: 177, text: "İçim bu gecə" },
-            { time: 182, text: "♪ (Müzik bitişi)" }
+            { time: 19.5, text: "Bu gecə sərxoşam" },
+            { time: 23.0, text: "Düşünürəm səni" },
+            { time: 26.5, text: "Sənə vurulmuşam" },
+            { time: 29.5, text: "Qınama sən məni" },
+            { time: 33.0, text: "Belə olur sevəndə adam kövrəlir" },
+            { time: 36.5, text: "Qarışır hisslər, dumanlar gəlir" },
+            { time: 40.0, text: "Durmadan sənin sağlığına tək içirəm" },
+            { time: 46.5, text: "Yerin görsənir" },
+            { time: 50.0, text: "Ürəyim istədi" },
+            { time: 53.0, text: "Bəlkə gələsən yanıma" },
+            { time: 56.5, text: "Yerin görsənir" },
+            { time: 60.0, text: "Heç kəsi dinləmədən" },
+            { time: 63.5, text: "Gəl görüşək gizlicə" },
+            { time: 66.5, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 70.0, text: "Süzüm nəfəsini" },
+            { time: 72.0, text: "İçim bu gecə" },
+            { time: 74.0, text: "Heç kəsi dinləmədən" },
+            { time: 77.0, text: "Gəl görüşək gizlicə" },
+            { time: 80.0, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 83.5, text: "Süzüm nəfəsini" },
+            { time: 85.5, text: "İçim bu gecə" },
+            { time: 89.0, text: "♪ (Müzik)" },
+            { time: 115.0, text: "Belə olur sevəndə adam kövrəlir" },
+            { time: 119.0, text: "Qarışır hisslər, dumanlar gəlir" },
+            { time: 122.5, text: "Durmadan sənin sağlığına tək içirəm" },
+            { time: 129.0, text: "Yerin görsənir" },
+            { time: 132.5, text: "Ürəyim istədi" },
+            { time: 135.5, text: "Bəlkə gələsən yanıma" },
+            { time: 139.0, text: "Yerin görsənir" },
+            { time: 142.5, text: "Heç kəsi dinləmədən" },
+            { time: 146.0, text: "Gəl görüşək gizlicə" },
+            { time: 149.0, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 152.5, text: "Süzüm nəfəsini" },
+            { time: 154.5, text: "İçim bu gecə" },
+            { time: 156.5, text: "Heç kəsi dinləmədən" },
+            { time: 159.5, text: "Gəl görüşək gizlicə" },
+            { time: 162.5, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 166.0, text: "Süzüm nəfəsini" },
+            { time: 168.0, text: "İçim bu gecə" },
+            { time: 173.0, text: "♪ (Müzik bitişi)" }
         ];
 
         const audio = document.getElementById('audioPlayer');
         const lyricsWrapper = document.getElementById('lyricsWrapper');
-        const scrollArea = document.getElementById('lyricsScrollArea');
         let currentLineIndex = -1;
 
+        // Sözleri HTML'e yazdırma
         lyricsData.forEach((line, index) => {
             const div = document.createElement('div');
             div.className = 'lyric-line';
@@ -253,13 +253,13 @@
             lyricsWrapper.appendChild(div);
         });
 
+        // Şarkı çaldıkça takip etme ve otomatik ortalama
         audio.addEventListener('timeupdate', () => {
-            // Burada offset (kayma) değerini işliyoruz
-            const adjustedTime = audio.currentTime + zamanKaymasi;
+            const currentTime = audio.currentTime;
             
             let activeIndex = -1;
             for (let i = 0; i < lyricsData.length; i++) {
-                if (adjustedTime >= lyricsData[i].time) {
+                if (currentTime >= lyricsData[i].time) {
                     activeIndex = i;
                 } else {
                     break;
@@ -267,19 +267,21 @@
             }
 
             if (activeIndex !== currentLineIndex && activeIndex !== -1) {
+                // Eski parlayan sözü söndür
                 if (currentLineIndex !== -1) {
                     const prevLine = document.getElementById(`line-${currentLineIndex}`);
                     if(prevLine) prevLine.classList.remove('active');
                 }
                 
+                // Yeni sözü parlat ve EKRANIN TAM ORTASINA sabitle
                 const currentLine = document.getElementById(`line-${activeIndex}`);
                 if(currentLine) {
                     currentLine.classList.add('active');
                     
-                    const scrollPosition = currentLine.offsetTop - (scrollArea.clientHeight / 2) + (currentLine.clientHeight / 2);
-                    scrollArea.scrollTo({
-                        top: scrollPosition,
-                        behavior: 'smooth'
+                    // Sihirli kod burası: Sözü otomatik olarak ortalar
+                    currentLine.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
                     });
                 }
                 currentLineIndex = activeIndex;
