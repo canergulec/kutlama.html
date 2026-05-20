@@ -101,7 +101,7 @@
             background-color: rgba(40, 40, 40, 0.4); 
             border-radius: 12px;
             padding: 25px;
-            height: 500px; /* Sabit yükseklik verdik ki içindeki yazılar kaysın */
+            height: 500px;
         }
 
         .lyrics-header {
@@ -117,14 +117,13 @@
             overflow-y: auto;
             position: relative;
             scroll-behavior: smooth;
-            scrollbar-width: none; /* Firefox için gizle */
-            /* İlk ve son sözlerin de tam ortaya gelebilmesi için üstten ve alttan boşluk */
+            scrollbar-width: none; 
             padding-top: 200px; 
             padding-bottom: 200px;
         }
         
         .lyrics-scroll-area::-webkit-scrollbar {
-            display: none; /* Chrome/Safari için gizle */
+            display: none; 
         }
 
         .lyric-line {
@@ -144,7 +143,6 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
-        /* Telefon ekranı için alt alta düzeni */
         @media (max-width: 768px) {
             .main-wrapper {
                 flex-direction: column;
@@ -189,13 +187,16 @@
             <div class="lyrics-header">Sözler</div>
             <div class="lyrics-scroll-area" id="lyricsScrollArea">
                 <div id="lyricsWrapper">
-                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Gönderdiğin mp3 dosyasına göre saniyeler milimetrik ayarlandı
+        // SÖZLERİN 1 SANİYE ERKEN GELMESİ İÇİN AYAR
+        // Daha da erken gelmesini istersen bu sayıyı büyüt (örneğin 1.5 veya 2)
+        const zamanKaymasi = 1; 
+
         const lyricsData = [
             { time: 0, text: "♪ (Müzik)" },
             { time: 19.5, text: "Bu gecə sərxoşam" },
@@ -244,7 +245,6 @@
         const lyricsWrapper = document.getElementById('lyricsWrapper');
         let currentLineIndex = -1;
 
-        // Sözleri HTML'e yazdırma
         lyricsData.forEach((line, index) => {
             const div = document.createElement('div');
             div.className = 'lyric-line';
@@ -253,13 +253,13 @@
             lyricsWrapper.appendChild(div);
         });
 
-        // Şarkı çaldıkça takip etme ve otomatik ortalama
         audio.addEventListener('timeupdate', () => {
-            const currentTime = audio.currentTime;
+            // Zaman kaymasını şarkının anki süresine ekliyoruz
+            const adjustedTime = audio.currentTime + zamanKaymasi;
             
             let activeIndex = -1;
             for (let i = 0; i < lyricsData.length; i++) {
-                if (currentTime >= lyricsData[i].time) {
+                if (adjustedTime >= lyricsData[i].time) {
                     activeIndex = i;
                 } else {
                     break;
@@ -267,18 +267,15 @@
             }
 
             if (activeIndex !== currentLineIndex && activeIndex !== -1) {
-                // Eski parlayan sözü söndür
                 if (currentLineIndex !== -1) {
                     const prevLine = document.getElementById(`line-${currentLineIndex}`);
                     if(prevLine) prevLine.classList.remove('active');
                 }
                 
-                // Yeni sözü parlat ve EKRANIN TAM ORTASINA sabitle
                 const currentLine = document.getElementById(`line-${activeIndex}`);
                 if(currentLine) {
                     currentLine.classList.add('active');
                     
-                    // Sihirli kod burası: Sözü otomatik olarak ortalar
                     currentLine.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center'
