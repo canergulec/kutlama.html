@@ -17,32 +17,37 @@
             color: #ffffff;
             display: flex;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        .spotify-container {
+        .main-wrapper {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
             width: 100%;
-            max-width: 450px;
-            background: linear-gradient(180deg, #424242 0%, #121212 100%);
-            padding: 30px 20px;
+            max-width: 900px;
+            background: linear-gradient(180deg, #2a2a2a 0%, #121212 100%);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
+        }
+
+        .player-section {
+            width: 350px;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            scrollbar-width: none; /* Firefox için gizle */
-        }
-        
-        .spotify-container::-webkit-scrollbar {
-            display: none; /* Chrome/Safari için gizle */
         }
 
         .top-bar {
             text-align: center;
             font-size: 0.8rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
             color: #b3b3b3;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .album-cover {
@@ -51,8 +56,8 @@
             background-color: #282828;
             border-radius: 8px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            margin-bottom: 30px;
-            background-image: url('cover.jpg'); /* Klasördeki cover.jpg dosyasını çeker, yoksa gri durur */
+            margin-bottom: 25px;
+            background-image: url('cover.jpg'); 
             background-size: cover;
             background-position: center;
         }
@@ -79,94 +84,118 @@
         .like-icon {
             color: #1db954;
             font-size: 1.5rem;
+            cursor: pointer;
         }
 
         audio {
             width: 100%;
-            margin-bottom: 30px;
             border-radius: 50px;
             height: 40px;
+            outline: none;
         }
 
-        /* Spotify Şarkı Sözleri Kutusu Tasarımı */
-        .lyrics-card {
-            background-color: #2a2a2a;
-            border-radius: 12px;
-            padding: 20px;
+        .lyrics-section {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            min-height: 350px;
+            background-color: rgba(40, 40, 40, 0.4); 
+            border-radius: 12px;
+            padding: 25px;
         }
 
         .lyrics-header {
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            color: #ffffff;
         }
 
         .lyrics-scroll-area {
-            height: 250px;
+            flex: 1;
+            height: 400px; 
             overflow-y: auto;
             position: relative;
-            padding-bottom: 150px; /* Kaydırma boşluğu */
+            padding-bottom: 200px; 
             scroll-behavior: smooth;
-            scrollbar-width: none;
+            scrollbar-width: none; 
         }
         
         .lyrics-scroll-area::-webkit-scrollbar {
-            display: none;
+            display: none; 
         }
 
         .lyric-line {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.4); /* Aktif olmayan sözler soluk */
-            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.3); 
+            margin-bottom: 20px;
             line-height: 1.4;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
             text-align: left;
+            cursor: default;
         }
 
         .lyric-line.active {
-            color: #ffffff; /* Aktif olan söz parlak beyaz */
+            color: #ffffff;
+            font-size: 1.8rem; 
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
+        @media (max-width: 768px) {
+            .main-wrapper {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+            .player-section {
+                width: 100%;
+                max-width: 350px;
+            }
+            .lyrics-section {
+                width: 100%;
+                max-width: 350px;
+            }
+            .lyrics-scroll-area {
+                height: 300px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="spotify-container">
-        
-        <div class="top-bar">
-            Şu an Çalınan
-        </div>
-
-        <div class="album-cover"></div>
-
-        <div class="song-details">
-            <div class="song-info">
-                <h1>Yerin Görsənir</h1>
-                <h2>Namiq Qasımov</h2>
+    <div class="main-wrapper">
+        <div class="player-section">
+            <div class="top-bar">Şu an Çalınan</div>
+            <div class="album-cover"></div>
+            
+            <div class="song-details">
+                <div class="song-info">
+                    <h1>Yerin Görsənir</h1>
+                    <h2>Namiq Qasımov</h2>
+                </div>
+                <div class="like-icon">♥</div>
             </div>
-            <div class="like-icon">♥</div>
+
+            <audio id="audioPlayer" controls>
+                <source src="sarki.mp3" type="audio/mpeg">
+            </audio>
         </div>
 
-        <audio id="audioPlayer" controls>
-            <source src="sarki.mp3" type="audio/mpeg">
-        </audio>
-
-        <div class="lyrics-card">
+        <div class="lyrics-section">
             <div class="lyrics-header">Sözler</div>
             <div class="lyrics-scroll-area" id="lyricsScrollArea">
                 <div id="lyricsWrapper">
-                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
     <script>
+        // BURASI ÇOK ÖNEMLİ KANKA
+        // Sözler sesten ERKEN geliyorsa bu sayıyı artır (örn: 1.5 veya 3)
+        // Sözler sesten GEÇ geliyorsa eksi yap (örn: -1.5 veya -2)
+        const zamanKaymasi = 0; 
+
         const lyricsData = [
             { time: 0, text: "♪ (Müzik)" },
             { time: 24, text: "Bu gecə sərxoşam" },
@@ -225,11 +254,12 @@
         });
 
         audio.addEventListener('timeupdate', () => {
-            const currentTime = audio.currentTime;
+            // Burada offset (kayma) değerini işliyoruz
+            const adjustedTime = audio.currentTime + zamanKaymasi;
             
             let activeIndex = -1;
             for (let i = 0; i < lyricsData.length; i++) {
-                if (currentTime >= lyricsData[i].time) {
+                if (adjustedTime >= lyricsData[i].time) {
                     activeIndex = i;
                 } else {
                     break;
@@ -246,7 +276,6 @@
                 if(currentLine) {
                     currentLine.classList.add('active');
                     
-                    // Aktif sözü kutunun ortasına otomatik kaydırır
                     const scrollPosition = currentLine.offsetTop - (scrollArea.clientHeight / 2) + (currentLine.clientHeight / 2);
                     scrollArea.scrollTo({
                         top: scrollPosition,
