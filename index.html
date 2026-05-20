@@ -16,13 +16,13 @@
             background-color: #F06292;
             color: #ffffff;
             display: flex;
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
 
         .main-wrapper {
+            /* Margin auto sayesinde sayfa sığmazsa üstten kesilmez, scroll çıkar */
+            margin: auto; 
             display: flex;
             flex-direction: row;
             gap: 40px;
@@ -226,18 +226,25 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
         }
 
+        /* MOBİL UYUM KISMI GÜNCELLENDİ */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
             .main-wrapper {
                 flex-direction: column;
                 align-items: center;
                 padding: 20px;
+                gap: 25px;
             }
-            .player-section, .lyrics-section {
+            .player-section {
                 width: 100%;
                 max-width: 350px;
             }
             .lyrics-section {
-                height: 400px;
+                width: 100%;
+                max-width: 350px;
+                height: 400px; /* Mobilde şarkı sözü kutusunun boyutu */
             }
         }
     </style>
@@ -285,20 +292,18 @@
     </div>
 
     <script>
-        // İŞTE BURASI: Altyazıları 1 saniye geriye aldık (1 saniye daha ERKEN gelecek).
-        // Eğer geç gelmesini istersen 1 yerine -1 yapabilirsin.
-        const zamanKaymasi = 4; 
+        const zamanKaymasi = 0; 
 
         const lyricsData = [
             { time: 0.0, text: "♪ (Müzik)" },
-            { time: 21.5, text: "Bu gecə sərxoşam" },
-            { time: 24.8, text: "Düşünürəm səni" },
-            { time: 28.0, text: "Sənə vurulmuşam" },
-            { time: 31.0, text: "Qınama sən məni" },
-            { time: 34.5, text: "Belə olur sevəndə adam kövrəlir" },
-            { time: 38.2, text: "Qarışır hisslər, dumanlar gəlir" },
-            { time: 42.5, text: "Durmadan sənin sağlığına tək içirəm" },
-            { time: 49.0, text: "Yerin görsənir" },
+            { time: 18.0, text: "Bu gecə sərxoşam" },
+            { time: 21.0, text: "Düşünürəm səni" },
+            { time: 24.0, text: "Sənə vurulmuşam" },
+            { time: 27.0, text: "Qınama sən məni" },
+            { time: 30.0, text: "Belə olur sevəndə adam kövrəlir" },
+            { time: 33.0, text: "Qarışır hisslər, dumanlar gəlir" },
+            { time: 37.0, text: "Durmadan sənin sağlığına tək içirəm" },
+            { time: 42.0, text: "Yerin görsənir" },
             { time: 52.5, text: "Ürəyim istədi" },
             { time: 55.8, text: "Bəlkə gələsən yanıma" },
             { time: 59.5, text: "Yerin görsənir" },
@@ -385,7 +390,6 @@
             const progressPercent = (currentTime / audio.duration) * 100;
             progressBar.style.background = `linear-gradient(to right, #1db954 ${progressPercent}%, #4d4d4d ${progressPercent}%)`;
             
-            // Zaman kaymasını sözlerin akışına ekliyoruz
             const adjustedTime = currentTime + zamanKaymasi;
 
             let activeIndex = -1;
