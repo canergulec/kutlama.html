@@ -5,130 +5,217 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yerin Görsənir - Namiq Qasımov</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
         body {
-            background-color: #121212;
+            background-color: #000000;
             color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .spotify-container {
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(180deg, #424242 0%, #121212 100%);
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox için gizle */
         }
-        .header-text {
-            position: absolute;
-            top: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1db954; /* Spotify yeşili tonunda */
+        
+        .spotify-container::-webkit-scrollbar {
+            display: none; /* Chrome/Safari için gizle */
+        }
+
+        .top-bar {
             text-align: center;
-            width: 100%;
+            font-size: 0.8rem;
+            font-weight: 600;
             letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #b3b3b3;
+            margin-bottom: 30px;
         }
-        .album-art {
-            width: 250px;
-            height: 250px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
-            margin-bottom: 20px;
+
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1 / 1;
             background-color: #282828;
-            /* Resim eklemek istersen alttaki yorumu kaldır ve resim adını gir */
-            /* background-image: url('cover.jpg'); */
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            margin-bottom: 30px;
+            background-image: url('cover.jpg'); /* Klasördeki cover.jpg dosyasını çeker, yoksa gri durur */
             background-size: cover;
             background-position: center;
         }
-        .song-info {
-            text-align: center;
+
+        .song-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
-        .song-title {
-            font-size: 2rem;
-            margin: 0;
+
+        .song-info h1 {
+            font-size: 1.5rem;
             font-weight: 700;
+            margin-bottom: 5px;
         }
-        .artist-name {
-            font-size: 1.2rem;
+
+        .song-info h2 {
+            font-size: 1rem;
+            font-weight: 500;
             color: #b3b3b3;
-            margin: 5px 0 0 0;
         }
-        .lyrics-container {
-            height: 180px;
-            overflow: hidden;
-            position: relative;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-            /* Üstten ve alttan solma efekti (fade) */
-            mask-image: linear-gradient(transparent, black 30%, black 70%, transparent);
-            -webkit-mask-image: linear-gradient(transparent, black 30%, black 70%, transparent);
+
+        .like-icon {
+            color: #1db954;
+            font-size: 1.5rem;
         }
-        .lyrics-wrapper {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            transition: transform 0.5s ease-out;
-        }
-        .lyric-line {
-            font-size: 1.3rem;
-            padding: 12px 0;
-            color: #555;
-            transition: all 0.3s ease;
-            min-height: 35px;
-            margin: 0;
-        }
-        .lyric-line.active {
-            color: #ffffff;
-            font-size: 1.6rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
+
         audio {
-            margin-top: 30px;
-            width: 80%;
-            max-width: 400px;
-            outline: none;
+            width: 100%;
+            margin-bottom: 30px;
+            border-radius: 50px;
+            height: 40px;
         }
+
+        /* Spotify Şarkı Sözleri Kutusu Tasarımı */
+        .lyrics-card {
+            background-color: #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            min-height: 350px;
+        }
+
+        .lyrics-header {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .lyrics-scroll-area {
+            height: 250px;
+            overflow-y: auto;
+            position: relative;
+            padding-bottom: 150px; /* Kaydırma boşluğu */
+            scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+        
+        .lyrics-scroll-area::-webkit-scrollbar {
+            display: none;
+        }
+
+        .lyric-line {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4); /* Aktif olmayan sözler soluk */
+            margin-bottom: 15px;
+            line-height: 1.4;
+            transition: color 0.3s ease;
+            text-align: left;
+        }
+
+        .lyric-line.active {
+            color: #ffffff; /* Aktif olan söz parlak beyaz */
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="header-text">durum bu sarkı sana gelsin</div>
+    <div class="spotify-container">
+        
+        <div class="top-bar">
+            Şu an Çalınan
+        </div>
 
-    <div class="album-art"></div>
-    
-    <div class="song-info">
-        <h1 class="song-title">Yerin Görsənir</h1>
-        <h2 class="artist-name">Namiq Qasımov</h2>
-    </div>
+        <div class="album-cover"></div>
 
-    <div class="lyrics-container">
-        <div class="lyrics-wrapper" id="lyricsWrapper">
+        <div class="song-details">
+            <div class="song-info">
+                <h1>Yerin Görsənir</h1>
+                <h2>Namiq Qasımov</h2>
             </div>
-    </div>
+            <div class="like-icon">♥</div>
+        </div>
 
-    <audio id="audioPlayer" controls>
-        <source src="sarki.mp3" type="audio/mpeg">
-        Tarayıcınız müzik çaları desteklemiyor.
-    </audio>
+        <audio id="audioPlayer" controls>
+            <source src="sarki.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="lyrics-card">
+            <div class="lyrics-header">Sözler</div>
+            <div class="lyrics-scroll-area" id="lyricsScrollArea">
+                <div id="lyricsWrapper">
+                    </div>
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        // ŞARKI SÖZLERİ VE ZAMANLAMALARI (Saniye cinsinden)
-        // Şarkıyı dinleyerek saniyeleri ve sözleri buraya girmelisin.
         const lyricsData = [
-            { time: 0, text: "(Müzik)" },
-            { time: 8, text: "Bu kısma şarkının ilk cümlesini yaz..." },
-            { time: 13, text: "Buraya ikinci cümleyi yaz..." },
-            { time: 18, text: "time kısmındaki sayılar saniyeyi ifade eder." },
-            { time: 24, text: "Sözleri bu şekilde çoğaltarak aşağı doğru inebilirsin." }
+            { time: 0, text: "♪ (Müzik)" },
+            { time: 24, text: "Bu gecə sərxoşam" },
+            { time: 27, text: "Düşünürəm səni" },
+            { time: 30, text: "Sənə vurulmuşam" },
+            { time: 33, text: "Qınama sən məni" },
+            { time: 36, text: "Belə olur sevəndə adam kövrəlir" },
+            { time: 40, text: "Qarışır hisslər, dumanlar gəlir" },
+            { time: 44, text: "Durmadan sənin sağlığına tək içirəm" },
+            { time: 50, text: "Yerin görsənir" },
+            { time: 53, text: "Ürəyim istədi" },
+            { time: 56, text: "Bəlkə gələsən yanıma" },
+            { time: 60, text: "Yerin görsənir" },
+            { time: 63, text: "Heç kəsi dinləmədən" },
+            { time: 66, text: "Gəl görüşək gizlicə" },
+            { time: 69, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 73, text: "Süzüm nəfəsini" },
+            { time: 75, text: "İçim bu gecə" },
+            { time: 78, text: "Heç kəsi dinləmədən" },
+            { time: 81, text: "Gəl görüşək gizlicə" },
+            { time: 84, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 88, text: "Süzüm nəfəsini" },
+            { time: 90, text: "İçim bu gecə" },
+            { time: 94, text: "♪ (Müzik)" },
+            { time: 122, text: "Belə olur sevəndə adam kövrəlir" },
+            { time: 126, text: "Qarışır hisslər, dumanlar gəlir" },
+            { time: 130, text: "Durmadan sənin sağlığına tək içirəm" },
+            { time: 136, text: "Yerin görsənir" },
+            { time: 139, text: "Ürəyim istədi" },
+            { time: 142, text: "Bəlkə gələsən yanıma" },
+            { time: 146, text: "Yerin görsənir" },
+            { time: 149, text: "Heç kəsi dinləmədən" },
+            { time: 152, text: "Gəl görüşək gizlicə" },
+            { time: 155, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 159, text: "Süzüm nəfəsini" },
+            { time: 161, text: "İçim bu gecə" },
+            { time: 164, text: "Heç kəsi dinləmədən" },
+            { time: 167, text: "Gəl görüşək gizlicə" },
+            { time: 171, text: "Dünyanın ən dəli sərxoşu kimi" },
+            { time: 174, text: "Süzüm nəfəsini" },
+            { time: 177, text: "İçim bu gecə" },
+            { time: 182, text: "♪ (Müzik bitişi)" }
         ];
 
         const audio = document.getElementById('audioPlayer');
         const lyricsWrapper = document.getElementById('lyricsWrapper');
+        const scrollArea = document.getElementById('lyricsScrollArea');
         let currentLineIndex = -1;
 
-        // Sözleri HTML içine aktarma
         lyricsData.forEach((line, index) => {
             const div = document.createElement('div');
             div.className = 'lyric-line';
@@ -137,7 +224,6 @@
             lyricsWrapper.appendChild(div);
         });
 
-        // Müzik çaldıkça sözleri takip etme ve kaydırma
         audio.addEventListener('timeupdate', () => {
             const currentTime = audio.currentTime;
             
@@ -157,13 +243,17 @@
                 }
                 
                 const currentLine = document.getElementById(`line-${activeIndex}`);
-                if(currentLine) currentLine.classList.add('active');
+                if(currentLine) {
+                    currentLine.classList.add('active');
+                    
+                    // Aktif sözü kutunun ortasına otomatik kaydırır
+                    const scrollPosition = currentLine.offsetTop - (scrollArea.clientHeight / 2) + (currentLine.clientHeight / 2);
+                    scrollArea.scrollTo({
+                        top: scrollPosition,
+                        behavior: 'smooth'
+                    });
+                }
                 currentLineIndex = activeIndex;
-
-                // Satır kaydırma animasyonu (satır yüksekliğine göre ayarlandı)
-                const lineHeight = 60; 
-                const translateY = -(activeIndex * lineHeight);
-                lyricsWrapper.style.transform = `translateY(${translateY}px)`;
             }
         });
     </script>
