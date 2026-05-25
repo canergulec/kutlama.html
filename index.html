@@ -264,7 +264,7 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
-        /* MOBİL UYUM */
+        /* MOBİL UYUM GÜNCELLENDİ */
         @media (max-width: 768px) {
             body {
                 padding: 0;
@@ -272,19 +272,23 @@
             .main-wrapper {
                 flex-direction: column;
                 align-items: center;
-                padding: 30px 20px;
+                padding: 30px 20px 50px 20px; /* Tarayıcı çubukları için alttan daha çok boşluk */
                 gap: 30px;
                 border-radius: 0;
                 min-height: 100vh;
+                height: auto;
             }
             .player-section {
                 width: 100%;
                 max-width: 400px;
+                flex-shrink: 0; /* Üst kısmın ezilmesini engeller */
             }
             .lyrics-section {
                 width: 100%;
                 max-width: 400px;
-                height: 450px; 
+                flex: none; /* Flexbox'ın boyutu küçültmesine izin vermez */
+                height: 500px; /* Kutuyu mobilde bayağı büyüttük */
+                min-height: 500px; 
             }
         }
     </style>
@@ -448,7 +452,6 @@
             currentTimeEl.innerText = formatTime(currentTime);
 
             const progressPercent = (currentTime / audio.duration) * 100;
-            // CSS değişkeni atayarak hover etkisinde progress bar'ın doğru dolmasını sağlıyoruz
             progressBar.style.setProperty('--progress-percent', `${progressPercent}%`);
             progressBar.style.background = `linear-gradient(to right, #ffffff ${progressPercent}%, #4d4d4d ${progressPercent}%)`;
             
@@ -473,13 +476,10 @@
                 if(currentLine) {
                     currentLine.classList.add('active');
                     
-                    // MOBİL UYUM DÜZELTMESİ:
-                    // Kutunun o anki gerçek yüksekliğini alarak hesap yapıyoruz (top:50% hatası düzeliyor)
                     const containerHeight = lyricsScrollArea.clientHeight;
                     const lineOffsetTop = currentLine.offsetTop;
                     const lineHeight = currentLine.clientHeight;
                     
-                    // Aktif satırı tam ortalamak için matematik hesabı
                     const offset = (containerHeight / 2) - lineOffsetTop - (lineHeight / 2);
                     
                     lyricsWrapper.style.transform = `translateY(${offset}px)`;
