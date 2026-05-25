@@ -14,7 +14,6 @@
         }
         
         body {
-            /* Spotify'ın arkadaki koyu renk tonu */
             background-color: #121212; 
             color: #ffffff;
             display: flex;
@@ -29,7 +28,6 @@
             gap: 40px;
             width: 100%;
             max-width: 900px;
-            /* Albüm kapağına uyumlu dinamik bir arka plan hissi */
             background: linear-gradient(180deg, #382c2a 0%, #121212 100%);
             padding: 40px;
             border-radius: 15px;
@@ -100,12 +98,10 @@
             transform: scale(1.05);
         }
 
-        /* Boş kalp hover olduğunda rengi beyazlaşsın */
         #heartOutline:hover {
             fill: #ffffff !important;
         }
 
-        /* Dolu kalp hover olduğunda Spotify açık yeşili olsun */
         #heartFilled:hover {
             fill: #1ed760 !important;
         }
@@ -227,7 +223,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background-color: #927e79; /* Kapağa uyumlu Spotify sözler arkaplanı */
+            background-color: #927e79; 
             border-radius: 12px;
             padding: 24px;
             height: 520px;
@@ -245,7 +241,6 @@
             flex: 1;
             overflow: hidden; 
             position: relative;
-            /* Mobilde hesaplamanın doğru yapılması için height ve width eklendi */
             height: 100%;
             width: 100%;
             mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
@@ -269,7 +264,13 @@
             line-height: 1.3;
             transition: all 0.3s ease;
             text-align: left;
-            cursor: default;
+            cursor: pointer; /* YENİ: Tıklanabilir hissi için eklendi */
+        }
+
+        /* YENİ: Üzerine gelindiğinde hafifçe parlama efekti */
+        .lyric-line:hover:not(.active) {
+            color: #ffffff;
+            opacity: 0.8;
         }
 
         .lyric-line.active {
@@ -279,7 +280,6 @@
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
-        /* MOBİL UYUM GÜNCELLENDİ */
         @media (max-width: 768px) {
             body {
                 padding: 0;
@@ -287,7 +287,7 @@
             .main-wrapper {
                 flex-direction: column;
                 align-items: center;
-                padding: 30px 20px 50px 20px; /* Tarayıcı çubukları için alttan daha çok boşluk */
+                padding: 30px 20px 50px 20px; 
                 gap: 30px;
                 border-radius: 0;
                 min-height: 100vh;
@@ -296,13 +296,13 @@
             .player-section {
                 width: 100%;
                 max-width: 400px;
-                flex-shrink: 0; /* Üst kısmın ezilmesini engeller */
+                flex-shrink: 0; 
             }
             .lyrics-section {
                 width: 100%;
                 max-width: 400px;
-                flex: none; /* Flexbox'ın boyutu küçültmesine izin vermez */
-                height: 500px; /* Kutuyu mobilde bayağı büyüttük */
+                flex: none; 
+                height: 500px; 
                 min-height: 500px; 
             }
         }
@@ -337,7 +337,7 @@
                     <span id="totalTime">0:00</span>
                 </div>
                 <div class="controls">
-                    <button class="control-btn" style="opacity: 0.4;">
+                    <button class="control-btn" id="shuffleBtn" style="opacity: 0.4;">
                         <svg role="img" height="16" width="16" viewBox="0 0 16 16"><path d="M13.151.922a.75.75 0 1 0-1.06 1.06L13.109 3H11.16a3.75 3.75 0 0 0-2.873 1.34l-6.173 7.356A2.25 2.25 0 0 1 .39 12.5H0V14h.391a3.75 3.75 0 0 0 2.873-1.34l6.173-7.356a2.25 2.25 0 0 1 1.724-.804h1.947l-1.017 1.018a.75.75 0 0 0 1.06 1.06L15.98 3.75 13.15.922zM.391 3.5H0V2h.391a2.25 2.25 0 0 1 1.724.804l1.465 1.747-1.146 1.365L1.054 4.304A3.75 3.75 0 0 0 .391 3.5zM15.98 12.25l-2.83 2.828a.75.75 0 1 1-1.06-1.06l1.018-1.018H11.16a2.25 2.25 0 0 1-1.724-.804l-1.465-1.747 1.146-1.365 1.38 1.644a3.75 3.75 0 0 0 2.873 1.34h1.947l-1.017-1.018a.75.75 0 1 1 1.06-1.06l2.83 2.828z"></path></svg>
                     </button>
                     <button class="control-btn" id="prevBtn">
@@ -423,21 +423,36 @@
         const currentTimeEl = document.getElementById('currentTime');
         const totalTimeEl = document.getElementById('totalTime');
         
-        // Yeni butonlar için değişkenler
         const likeBtn = document.getElementById('likeBtn');
         const heartFilled = document.getElementById('heartFilled');
         const heartOutline = document.getElementById('heartOutline');
         const repeatBtn = document.getElementById('repeatBtn');
         
+        // YENİ: Shuffle butonu değişkenleri eklendi
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        
         let currentLineIndex = -1;
-        let isLiked = true; // Başlangıçta kalp dolu
-        let isRepeat = false; // Başlangıçta tekrar kapalı
+        let isLiked = true; 
+        let isRepeat = false; 
+        let isShuffle = false; // YENİ: Shuffle başlangıçta kapalı
 
         lyricsData.forEach((line, index) => {
             const div = document.createElement('div');
             div.className = 'lyric-line';
             div.id = `line-${index}`;
             div.innerText = line.text;
+            
+            // YENİ: Söze tıklandığında o saniyeye gitme işlevi eklendi
+            div.addEventListener('click', () => {
+                audio.currentTime = line.time;
+                
+                if (audio.paused) {
+                    audio.play();
+                    playIconSvg.style.display = 'none';
+                    pauseIconSvg.style.display = 'block';
+                }
+            });
+
             lyricsWrapper.appendChild(div);
         });
 
@@ -448,7 +463,6 @@
             return `${min}:${sec < 10 ? '0' : ''}${sec}`;
         }
 
-        // --- Kalp (Like) Butonu Olayı ---
         likeBtn.addEventListener('click', () => {
             isLiked = !isLiked;
             if (isLiked) {
@@ -460,15 +474,26 @@
             }
         });
 
-        // --- Tekrar Çalma (Repeat) Butonu Olayı ---
         repeatBtn.addEventListener('click', () => {
             isRepeat = !isRepeat;
             if (isRepeat) {
                 repeatBtn.style.opacity = '1';
-                repeatBtn.querySelector('svg').style.fill = '#1db954'; // Spotify yeşili
+                repeatBtn.querySelector('svg').style.fill = '#1db954';
             } else {
                 repeatBtn.style.opacity = '0.4';
-                repeatBtn.querySelector('svg').style.fill = '#ffffff'; // Normal beyaz
+                repeatBtn.querySelector('svg').style.fill = '#ffffff'; 
+            }
+        });
+
+        // YENİ: Sol Buton (Shuffle) Tıklama Olayı eklendi
+        shuffleBtn.addEventListener('click', () => {
+            isShuffle = !isShuffle;
+            if (isShuffle) {
+                shuffleBtn.style.opacity = '1';
+                shuffleBtn.querySelector('svg').style.fill = '#1db954'; 
+            } else {
+                shuffleBtn.style.opacity = '0.4';
+                shuffleBtn.querySelector('svg').style.fill = '#ffffff'; 
             }
         });
 
@@ -538,7 +563,6 @@
 
         audio.addEventListener('ended', () => {
             if (isRepeat) {
-                // Tekrar çalma açıksa şarkıyı ve sözleri başa sarıp çalmaya devam et
                 audio.currentTime = 0;
                 audio.play();
                 
@@ -549,7 +573,6 @@
                     currentLineIndex = -1;
                 }
             } else {
-                // Tekrar çalma kapalıysa şarkıyı bitir
                 playIconSvg.style.display = 'block';
                 pauseIconSvg.style.display = 'none';
                 progressBar.value = 0;
